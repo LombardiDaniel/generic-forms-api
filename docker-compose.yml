@@ -1,0 +1,29 @@
+version: "3.2"
+
+services:
+  generic-forms-api:
+    container_name: generic-forms-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dev
+    # environment:
+    #   AUTH_TOKENS: AUTH_TOKEN  # comma separated
+    #   MONGO_URI: mongodb://mongodb:27017
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+    expose:
+      - 27017
+    volumes:
+      - generic-forms-api:/data/db
+
+volumes:
+  generic-forms-api:

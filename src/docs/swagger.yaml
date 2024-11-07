@@ -1,0 +1,94 @@
+definitions:
+  models.Form:
+    properties:
+      data: {}
+      email:
+        type: string
+      id:
+        type: string
+      ts:
+        type: string
+    required:
+    - data
+    - id
+    - ts
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/entries:
+    put:
+      consumes:
+      - application/json
+      description: Adds an entry to the db
+      parameters:
+      - description: user json
+        in: body
+        name: formPayload
+        required: true
+        schema:
+          $ref: '#/definitions/models.Form'
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "502":
+          description: Bad Gateway
+          schema:
+            type: string
+      summary: AddEntry
+      tags:
+      - Form
+  /v1/entries/{id}:
+    get:
+      description: Get entries from the db
+      parameters:
+      - description: Returns N parameters, if not passed, reutrns all
+        in: query
+        name: "n"
+        type: string
+      - description: identifier
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Form'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "409":
+          description: Conflict
+          schema:
+            type: string
+        "502":
+          description: Bad Gateway
+          schema:
+            type: string
+      security:
+      - Bearer: []
+      summary: GetEntries
+      tags:
+      - Form
+securityDefinitions:
+  Bearer:
+    description: '"Type ''Bearer TOKEN'' to correctly set the API Key"'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
