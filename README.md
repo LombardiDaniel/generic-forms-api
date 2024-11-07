@@ -13,7 +13,7 @@ curl -X 'PUT' \
   -H 'accept: text/plain' \
   -H 'Content-Type: application/json' \
   -d '{
-  "data": "example msg",
+  "data": "example msg or any JSON object",
   "email": "email@example.com",
   "id": "project_name",
   "ts": "2006-01-02T15:04:05Z"
@@ -26,7 +26,7 @@ Then just:
 
 ```sh
 curl -X 'GET' \
-  'http://forms.example.com/v1/entries/ticktr' \
+  'http://forms.example.com/v1/entries/' \
   -H 'accept: application/json' \
   -H 'Authorization: Bearer AUTH_TOKEN'
 ```

@@ -25,3 +25,6 @@ go.work.sum
 .env
 
 deployment.yml
+
+venv
+venv.nosync
