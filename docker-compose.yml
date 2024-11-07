@@ -8,8 +8,10 @@ services:
       dockerfile: Dockerfile
       target: dev
     # environment:
-    #   AUTH_TOKENS: AUTH_TOKEN  # comma separated
+    #   AUTH_TOKENS: AUTH_TOKEN # comma separated
     #   MONGO_URI: mongodb://mongodb:27017
+    #   GIN_MODE: release
+    #   HOST: forms.example.com
     env_file:
       - .env
     ports:

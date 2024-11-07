@@ -1,4 +1,9 @@
+[![Licence](https://img.shields.io/github/license/LombardiDaniel/generic-forms-api?style=for-the-badge)](./LICENSE)
+[![BuildStatus](https://img.shields.io/github/actions/workflow/status/LombardiDaniel/generic-forms-api/ci.yml?style=for-the-badge)](https://github.com/LombardiDaniel/generic-forms-api/actions)
+
 # Generic Forms API
+
+https://hub.docker.com/r/lombardi/generic-forms-api
 
 Generic data collector for your startup idea.
 
