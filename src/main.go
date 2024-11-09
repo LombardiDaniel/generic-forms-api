@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/LombardiDaniel/generic-data-collector-api/controllers"
 	"github.com/LombardiDaniel/generic-data-collector-api/docs"
@@ -112,18 +113,26 @@ func init() {
 
 // @securityDefinitions.apiKey Bearer
 // @in header
-// @name Authorization
+// @name X-Authorization
 // @description "Type 'Bearer $TOKEN' to correctly set the API Key"
 func main() {
 	defer mongoClient.Disconnect(ctx)
 
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{
-		"*",
-	}
-	corsConfig.AllowCredentials = true
+	// corsCfg := cors.Config{
+	// 	AllowAllOrigins:  true,
+	// 	AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
+	// 	AllowHeaders:     []string{"X-Authorization"},
+	// 	AllowCredentials: true,
+	// 	MaxAge:           12 * time.Hour,
+	// }
 
-	router.Use(cors.New(corsConfig))
+	corsCfg := cors.DefaultConfig()
+	corsCfg.AllowAllOrigins = true
+	corsCfg.AllowHeaders = []string{"X-Authorization"}
+	corsCfg.AllowCredentials = true
+	corsCfg.MaxAge = 12 * time.Hour
+
+	router.Use(cors.New(corsCfg))
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "OK")

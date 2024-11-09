@@ -6,7 +6,7 @@ AUTH_TOKEN = "my_auth_token"
 
 
 def main():
-    headers = {"accept": "application/json", "Authorization": f"Bearer {AUTH_TOKEN}"}
+    headers = {"accept": "application/json", "X-Authorization": f"Bearer {AUTH_TOKEN}"}
 
     response = requests.get(URL + PROJECT_ID, headers=headers)
 

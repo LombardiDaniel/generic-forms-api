@@ -28,7 +28,7 @@ Then just:
 curl -X 'GET' \
   'http://forms.example.com/v1/entries/' \
   -H 'accept: application/json' \
-  -H 'Authorization: Bearer AUTH_TOKEN'
+  -H 'X-Authorization: Bearer AUTH_TOKEN'
 ```
 
 ...and get the results.
