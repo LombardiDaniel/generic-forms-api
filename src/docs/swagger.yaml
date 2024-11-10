@@ -10,6 +10,7 @@ definitions:
         type: string
     required:
     - data
+    - email
     - id
     - ts
     type: object
@@ -87,7 +88,7 @@ paths:
       - Form
 securityDefinitions:
   Bearer:
-    description: '"Type ''Bearer TOKEN'' to correctly set the API Key"'
+    description: '"Type ''Bearer $TOKEN'' to correctly set the API Key"'
     in: header
     name: Authorization
     type: apiKey

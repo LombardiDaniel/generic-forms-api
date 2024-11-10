@@ -9,7 +9,7 @@ Generic data collector for your startup idea.
 
 ```sh
 curl -X 'PUT' \
-  'http://forms.example.com/v1/entries' \
+  'http://forms.example.com/v1/entries/' \
   -H 'accept: text/plain' \
   -H 'Content-Type: application/json' \
   -d '{
@@ -18,6 +18,28 @@ curl -X 'PUT' \
   "id": "project_name",
   "ts": "2006-01-02T15:04:05Z"
 }'
+```
+
+```ts
+const reqBody: FormData = {
+  email: formData.email,
+  data: formData.message,
+  id: "my-app-name",
+  ts: new Date().toISOString(),
+};
+
+try {
+  const response = await axios.put(
+    "https://forms.lombardi.lab.patos.dev/v1/entries/",
+    reqBody
+  );
+
+  if (response.status === 200) {
+    console.log(true);
+  }
+} catch (error) {
+  console.error(error);
+}
 ```
 
 This adds to the db (mongo). Note that the field `data` is any JS object, so customize it to your liking!

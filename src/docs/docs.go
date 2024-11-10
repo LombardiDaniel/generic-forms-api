@@ -128,6 +128,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "data",
+                "email",
                 "id",
                 "ts"
             ],
@@ -147,7 +148,7 @@ const docTemplate = `{
     },
     "securityDefinitions": {
         "Bearer": {
-            "description": "\"Type 'Bearer TOKEN' to correctly set the API Key\"",
+            "description": "\"Type 'Bearer $TOKEN' to correctly set the API Key\"",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"

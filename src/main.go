@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/LombardiDaniel/generic-data-collector-api/controllers"
 	"github.com/LombardiDaniel/generic-data-collector-api/docs"
@@ -88,13 +87,21 @@ func init() {
 	router = gin.Default()
 	router.SetTrustedProxies([]string{"*"})
 
+	corsCfg := cors.DefaultConfig()
+	corsCfg.AllowAllOrigins = true
+	corsCfg.AddAllowHeaders("Authorization")
+
+	slog.Info(fmt.Sprintf("corsCfg: %+v\n", corsCfg))
+
+	router.Use(cors.New(corsCfg))
+
 	docs.SwaggerInfo.Title = "Generic Forms API"
 	docs.SwaggerInfo.Description = "Generic Forms API"
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.BasePath = ""
 
 	if os.Getenv("GIN_MODE") == "release" {
-		docs.SwaggerInfo.Host = os.Getenv("HOST")
+		docs.SwaggerInfo.Host = os.Getenv("SWAGGER_HOST")
 		docs.SwaggerInfo.Schemes = []string{"https"}
 	} else {
 		docs.SwaggerInfo.Host = "localhost:8080"
@@ -110,24 +117,6 @@ func init() {
 // @description "Type 'Bearer $TOKEN' to correctly set the API Key"
 func main() {
 	defer mongoClient.Disconnect(ctx)
-
-	// corsCfg := cors.Config{
-	// 	AllowAllOrigins:  true,
-	// 	AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
-	// 	AllowHeaders:     []string{"Authorization"},
-	// 	AllowCredentials: true,
-	// 	MaxAge:           12 * time.Hour,
-	// }
-
-	corsCfg := cors.DefaultConfig()
-	corsCfg.AllowAllOrigins = true
-	corsCfg.AddAllowHeaders("Authorization")
-	corsCfg.AllowCredentials = false
-	corsCfg.MaxAge = 12 * time.Hour
-
-	slog.Info(fmt.Sprintf("corsCfg: %+v\n", corsCfg))
-
-	router.Use(cors.New(corsCfg))
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "OK")
