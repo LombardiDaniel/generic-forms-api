@@ -121,8 +121,7 @@ func main() {
 
 	corsCfg := cors.DefaultConfig()
 	corsCfg.AllowAllOrigins = true
-	corsCfg.AllowHeaders = []string{"Authorization", "Content-Type"}
-	// corsCfg.AllowHeaders = []string{"*"}
+	corsCfg.AddAllowHeaders("Authorization")
 	corsCfg.AllowCredentials = false
 	corsCfg.MaxAge = 12 * time.Hour
 
