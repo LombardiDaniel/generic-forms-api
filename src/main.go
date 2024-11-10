@@ -61,7 +61,7 @@ func init() {
 		slog.Error(err.Error())
 	}
 
-	formsDb := mongoClient.Database("formsDb")
+	formsDb := mongoClient.Database("formsdb")
 	formsCol = formsDb.Collection("forms")
 
 	_, err = formsCol.Indexes().CreateOne(ctx, mongo.IndexModel{
