@@ -30,7 +30,7 @@ func (m *AuthMiddleware) Authorize() gin.HandlerFunc {
 		// }
 		// would still need to auth
 
-		apiKey := ctx.GetHeader("X-Authorization")
+		apiKey := ctx.GetHeader("Authorization")
 		if apiKey == "" {
 			ctx.String(http.StatusUnauthorized, "Unauthorized")
 			ctx.Abort()

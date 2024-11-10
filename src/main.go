@@ -106,7 +106,7 @@ func init() {
 
 // @securityDefinitions.apiKey Bearer
 // @in header
-// @name X-Authorization
+// @name Authorization
 // @description "Type 'Bearer $TOKEN' to correctly set the API Key"
 func main() {
 	defer mongoClient.Disconnect(ctx)
@@ -114,14 +114,15 @@ func main() {
 	// corsCfg := cors.Config{
 	// 	AllowAllOrigins:  true,
 	// 	AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
-	// 	AllowHeaders:     []string{"X-Authorization"},
+	// 	AllowHeaders:     []string{"Authorization"},
 	// 	AllowCredentials: true,
 	// 	MaxAge:           12 * time.Hour,
 	// }
 
 	corsCfg := cors.DefaultConfig()
 	corsCfg.AllowAllOrigins = true
-	corsCfg.AllowHeaders = []string{"X-Authorization"}
+	// corsCfg.AllowHeaders = []string{"Authorization", "Content-Type"}
+	corsCfg.AllowHeaders = []string{"*"}
 	corsCfg.AllowCredentials = false
 	corsCfg.MaxAge = 12 * time.Hour
 
