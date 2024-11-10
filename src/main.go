@@ -132,7 +132,7 @@ func main() {
 	corsCfg.AllowCredentials = false
 	corsCfg.MaxAge = 12 * time.Hour
 
-	slog.Info(fmt.Sprintf("corsCfg: %v\n", corsCfg))
+	slog.Info(fmt.Sprintf("corsCfg: %+v\n", corsCfg))
 
 	router.Use(cors.New(corsCfg))
 
