@@ -129,8 +129,10 @@ func main() {
 	corsCfg := cors.DefaultConfig()
 	corsCfg.AllowAllOrigins = true
 	corsCfg.AllowHeaders = []string{"X-Authorization"}
-	corsCfg.AllowCredentials = true
+	corsCfg.AllowCredentials = false
 	corsCfg.MaxAge = 12 * time.Hour
+
+	slog.Info(fmt.Sprintf("corsCfg: %v\n", corsCfg))
 
 	router.Use(cors.New(corsCfg))
 
