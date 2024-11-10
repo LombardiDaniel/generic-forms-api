@@ -73,7 +73,6 @@ func init() {
 		return
 	}
 
-	hosts := strings.Split(os.Getenv("EXTRA_HOSTS"), ",")
 	authTokens := strings.Split(os.Getenv("AUTH_TOKENS"), ",")
 
 	// Services
@@ -87,7 +86,7 @@ func init() {
 	formsController = controllers.NewFormsController(formsService)
 
 	router = gin.Default()
-	router.SetTrustedProxies(hosts)
+	router.SetTrustedProxies([]string{"*"})
 
 	docs.SwaggerInfo.Title = "Generic Forms API"
 	docs.SwaggerInfo.Description = "Generic Forms API"
@@ -100,12 +99,6 @@ func init() {
 	} else {
 		docs.SwaggerInfo.Host = "localhost:8080"
 		docs.SwaggerInfo.Schemes = []string{"http"}
-	}
-
-	if hosts == nil {
-		slog.Info("Running on all hosts")
-	} else {
-		slog.Info(fmt.Sprintf("Available hosts: '%v'", hosts))
 	}
 
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
