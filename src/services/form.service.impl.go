@@ -10,28 +10,28 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-type FormsServiceMongoImpl struct {
-	dataStoreCol *mongo.Collection
+type FormServiceMongoImpl struct {
+	formsCol *mongo.Collection
 }
 
-func NewFormsServiceMongoImpl(col *mongo.Collection) FormsService {
-	return &FormsServiceMongoImpl{
-		dataStoreCol: col,
+func NewFormServiceMongoImpl(col *mongo.Collection) FormService {
+	return &FormServiceMongoImpl{
+		formsCol: col,
 	}
 }
 
-func (s *FormsServiceMongoImpl) InsertPayload(ctx context.Context, form models.Form) error {
-	_, err := s.dataStoreCol.InsertOne(ctx, form)
+func (s *FormServiceMongoImpl) InsertPayload(ctx context.Context, form models.Form) error {
+	_, err := s.formsCol.InsertOne(ctx, form)
 	return err
 }
 
-func (s *FormsServiceMongoImpl) Get(ctx context.Context, id string) ([]models.Form, error) {
+func (s *FormServiceMongoImpl) Get(ctx context.Context, id string) ([]models.Form, error) {
 	query := bson.M{
 		"id": id,
 	}
 
 	forms := []models.Form{}
-	cur, err := s.dataStoreCol.Find(ctx, query)
+	cur, err := s.formsCol.Find(ctx, query)
 	if err == mongo.ErrNilDocument {
 		return forms, nil
 	} else if err != nil {
@@ -47,7 +47,7 @@ func (s *FormsServiceMongoImpl) Get(ctx context.Context, id string) ([]models.Fo
 	return forms, err
 }
 
-func (s *FormsServiceMongoImpl) GetN(ctx context.Context, id string, n uint32) ([]models.Form, error) {
+func (s *FormServiceMongoImpl) GetN(ctx context.Context, id string, n uint32) ([]models.Form, error) {
 	query := bson.M{
 		"id": id,
 	}
@@ -56,7 +56,7 @@ func (s *FormsServiceMongoImpl) GetN(ctx context.Context, id string, n uint32) (
 
 	opts := options.Find().SetLimit(int64(n))
 
-	cur, err := s.dataStoreCol.Find(ctx, query, opts)
+	cur, err := s.formsCol.Find(ctx, query, opts)
 	if err == mongo.ErrNilDocument {
 		return forms, nil
 	} else if err != nil {

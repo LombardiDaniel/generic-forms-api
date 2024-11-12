@@ -28,10 +28,11 @@ var (
 	router *gin.Engine
 
 	formsCol *mongo.Collection
+	usersCol *mongo.Collection
 
 	// Services
 	authService  services.AuthService
-	formsService services.FormsService
+	formsService services.FormService
 
 	// Gin Controllers
 	formsController controllers.FormsController
@@ -62,7 +63,9 @@ func init() {
 	}
 
 	formsDb := mongoClient.Database("formsdb")
+
 	formsCol = formsDb.Collection("forms")
+	usersCol = formsDb.Collection("users")
 
 	_, err = formsCol.Indexes().CreateOne(ctx, mongo.IndexModel{
 		Keys: bson.D{{Key: "id", Value: -1}},
@@ -72,10 +75,22 @@ func init() {
 		return
 	}
 
+	uniqueIdx := true
+	_, err = usersCol.Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys: bson.D{{Key: "username", Value: -1}},
+		Options: &options.IndexOptions{
+			Unique: &uniqueIdx,
+		},
+	})
+	if err != nil {
+		slog.Error(fmt.Sprintf("Could not create idx: %s", err.Error()))
+		return
+	}
+
 	authTokens := strings.Split(os.Getenv("AUTH_TOKENS"), ",")
 
 	// Services
-	formsService = services.NewFormsServiceMongoImpl(formsCol)
+	formsService = services.NewFormServiceMongoImpl(formsCol)
 	authService = services.NewAuthServiceImpl(authTokens)
 
 	// Middleware

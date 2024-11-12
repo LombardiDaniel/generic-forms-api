@@ -14,14 +14,14 @@ import (
 )
 
 type FormsController struct {
-	dataStoreService services.FormsService
+	formService services.FormService
 }
 
 func NewFormsController(
-	dataStoreService services.FormsService,
+	formService services.FormService,
 ) FormsController {
 	return FormsController{
-		dataStoreService: dataStoreService,
+		formService: formService,
 	}
 }
 
@@ -48,7 +48,7 @@ func (c *FormsController) AddEntry(ctx *gin.Context) {
 
 	fmt.Printf("form: %v\n", form)
 
-	err := c.dataStoreService.InsertPayload(rCtx, form)
+	err := c.formService.InsertPayload(rCtx, form)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error while inserting form '%s': '%s'", form.Email, err.Error()))
 		ctx.String(http.StatusBadGateway, "BadGateway")
@@ -76,7 +76,7 @@ func (c *FormsController) GetEntries(ctx *gin.Context) {
 	n := ctx.Query("n")
 	nInt, err := strconv.ParseInt(n, 10, 32)
 	if err != nil {
-		payloads, err := c.dataStoreService.Get(rCtx, id)
+		payloads, err := c.formService.Get(rCtx, id)
 		if err != nil {
 			ctx.String(http.StatusBadGateway, "BadGateway")
 			return
@@ -87,7 +87,7 @@ func (c *FormsController) GetEntries(ctx *gin.Context) {
 
 	nInt32 := int32(nInt)
 	if nInt32 > 0 {
-		payloads, err := c.dataStoreService.GetN(rCtx, id, uint32(nInt32))
+		payloads, err := c.formService.GetN(rCtx, id, uint32(nInt32))
 		if err != nil {
 			ctx.String(http.StatusBadGateway, "BadGateway")
 			return
