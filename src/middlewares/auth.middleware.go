@@ -44,7 +44,7 @@ func (m *AuthMiddleware) Authorize() gin.HandlerFunc {
 			return
 		}
 
-		err := m.authService.Authenticate(tokenStrs[1])
+		err := m.authService.Authenticate(ctx.Request.Context(), tokenStrs[1])
 		if err != nil {
 			if err != utils.ErrAuth {
 				slog.Error(err.Error())

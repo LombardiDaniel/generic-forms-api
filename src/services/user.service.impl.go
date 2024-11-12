@@ -60,7 +60,7 @@ func (s *UserServiceMongoImpl) GetUsers(ctx context.Context) ([]models.User, err
 	return users, nil
 }
 
-func (s *UserServiceMongoImpl) NoUserRegistered(ctx context.Context) (bool, error) {
+func (s *UserServiceMongoImpl) NoUsersRegistered(ctx context.Context) (bool, error) {
 
 	_, err := s.usersCol.Find(ctx, bson.M{})
 	if err == mongo.ErrNilDocument {

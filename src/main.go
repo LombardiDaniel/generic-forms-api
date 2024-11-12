@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/LombardiDaniel/generic-data-collector-api/controllers"
 	"github.com/LombardiDaniel/generic-data-collector-api/docs"
@@ -27,8 +26,9 @@ import (
 var (
 	router *gin.Engine
 
-	formsCol *mongo.Collection
-	usersCol *mongo.Collection
+	formsCol  *mongo.Collection
+	usersCol  *mongo.Collection
+	tokensCol *mongo.Collection
 
 	// Services
 	authService  services.AuthService
@@ -66,6 +66,7 @@ func init() {
 
 	formsCol = formsDb.Collection("forms")
 	usersCol = formsDb.Collection("users")
+	tokensCol = formsDb.Collection("tokens")
 
 	_, err = formsCol.Indexes().CreateOne(ctx, mongo.IndexModel{
 		Keys: bson.D{{Key: "id", Value: -1}},
@@ -87,11 +88,30 @@ func init() {
 		return
 	}
 
-	authTokens := strings.Split(os.Getenv("AUTH_TOKENS"), ",")
+	_, err = tokensCol.Indexes().CreateMany(
+		ctx,
+		[]mongo.IndexModel{
+			{
+				Keys: bson.D{{Key: "username", Value: -1}},
+				Options: &options.IndexOptions{
+					Unique: &uniqueIdx,
+				},
+			}, {
+				Keys: bson.D{{Key: "token", Value: -1}},
+				Options: &options.IndexOptions{
+					Unique: &uniqueIdx,
+				},
+			},
+		},
+	)
+	if err != nil {
+		slog.Error(fmt.Sprintf("Could not create idx: %s", err.Error()))
+		return
+	}
 
 	// Services
 	formsService = services.NewFormServiceMongoImpl(formsCol)
-	authService = services.NewAuthServiceImpl(authTokens)
+	authService = services.NewAuthServiceImpl(tokensCol)
 
 	// Middleware
 	authMiddleware = middlewares.NewAuthMiddleware(authService)
