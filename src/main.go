@@ -26,9 +26,9 @@ import (
 var (
 	router *gin.Engine
 
-	formsCol  *mongo.Collection
-	usersCol  *mongo.Collection
-	tokensCol *mongo.Collection
+	formsCol    *mongo.Collection
+	usersCol    *mongo.Collection
+	sessionsCol *mongo.Collection
 
 	// Services
 	authService  services.AuthService
@@ -66,7 +66,7 @@ func init() {
 
 	formsCol = formsDb.Collection("forms")
 	usersCol = formsDb.Collection("users")
-	tokensCol = formsDb.Collection("tokens")
+	sessionsCol = formsDb.Collection("sessions")
 
 	_, err = formsCol.Indexes().CreateOne(ctx, mongo.IndexModel{
 		Keys: bson.D{{Key: "id", Value: -1}},
@@ -88,7 +88,7 @@ func init() {
 		return
 	}
 
-	_, err = tokensCol.Indexes().CreateMany(
+	_, err = sessionsCol.Indexes().CreateMany(
 		ctx,
 		[]mongo.IndexModel{
 			{
@@ -111,7 +111,7 @@ func init() {
 
 	// Services
 	formsService = services.NewFormServiceMongoImpl(formsCol)
-	authService = services.NewAuthServiceImpl(tokensCol)
+	authService = services.NewAuthServiceImpl(sessionsCol)
 
 	// Middleware
 	authMiddleware = middlewares.NewAuthMiddleware(authService)

@@ -9,12 +9,12 @@ import (
 )
 
 type AuthServiceImpl struct {
-	tokensCol *mongo.Collection
+	sessionsCol *mongo.Collection
 }
 
-func NewAuthServiceImpl(tokensCol *mongo.Collection) AuthService {
+func NewAuthServiceImpl(sessionsCol *mongo.Collection) AuthService {
 	return &AuthServiceImpl{
-		tokensCol: tokensCol,
+		sessionsCol: sessionsCol,
 	}
 }
 
@@ -25,7 +25,7 @@ func (s *AuthServiceImpl) Authenticate(ctx context.Context, key string) error {
 		"token": key,
 	}
 
-	err := s.tokensCol.FindOne(ctx, query).Decode(&token)
+	err := s.sessionsCol.FindOne(ctx, query).Decode(&token)
 	if err != nil {
 		return err
 	}
@@ -34,7 +34,7 @@ func (s *AuthServiceImpl) Authenticate(ctx context.Context, key string) error {
 }
 
 func (s *AuthServiceImpl) CreateToken(ctx context.Context, token models.Token) error {
-	_, err := s.tokensCol.InsertOne(ctx, token)
+	_, err := s.sessionsCol.InsertOne(ctx, token)
 	if err != nil {
 		return err
 	}
